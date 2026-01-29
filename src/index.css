@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+/* app-wide styles */
+html,body,#root {
+  height: 100%;
+}
+
+
+/* keep Leaflet map below header/modals */
+.leaflet-container {
+  z-index: 0 !important;
+}
+
+/* if popups or controls need to be above certain elements, fine-tune */
+.leaflet-control, .leaflet-popup {
+  z-index: 1005; /* keep popups above map but below global app header if header has higher z-index */
+}
+
+/* ensure your header/modal has a higher z-index */
+.app-header, header, .site-header {
+  position: relative; /* or sticky/fixed */
+  z-index: 19;
+}
+
+/* if you have a modal wrapper, make sure modal z-index > leaflet */
+.modal-root, .modal, .dialog {
+  z-index: 1950;
+}
+
+  .toast-container, .toast-wrapper, #toast-root {
+    z-index: 4000 !important;
+    position: fixed;
+    right: 16px;
+    top: 20px;
+  }
