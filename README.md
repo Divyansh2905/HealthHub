@@ -60,9 +60,6 @@
 * **Heatmaps**: React-Leaflet-Heatmap-Layer
 * **Video Communication**: Native WebRTC with Firestore Signaling / PeerJS
 
-### Data Visualization
-* **Charts**: [Recharts](https://recharts.org/)
-
 ---
 
 ## 🚀 Getting Started
