@@ -33,12 +33,12 @@
 
 ## ✨ Key Features
 
-* **🌍 Real-time Disease Mapping**: Interactive heatmaps and marker clusters (powered by **Leaflet**) allow users to visualize illness outbreaks and health reports geographically.
-* **🎥 Integrated Telemedicine**: Seamless, secure, browser-based video consultations using **WebRTC** and Firestore signaling, enabling remote diagnosis for patients in remote areas.
-* **🤝 Collaborative Resource Hub**: A verified directory connecting citizens with Doctors, NGOs, and emergency services.
-* **📢 Community Reporting**: Citizens can report health hazards (e.g., waste, stagnant water) or illness outbreaks, which are instantly visible to authorities.
-* **📊 Admin Command Center**: A comprehensive dashboard for authorities to track campaigns, manage referrals, view analytics (via **Recharts**), and verify providers.
-* **🔐 Role-Based Access Control**: Tailored interfaces and permissions for four distinct user types: **Citizens, Providers (Doctors), NGOs, and Admins**.
+* **Real-time Disease Mapping**: Interactive heatmaps and marker clusters (powered by **Leaflet**) allow users to visualize illness outbreaks and health reports geographically.
+* **Integrated Telemedicine**: Seamless, secure, browser-based video consultations using **WebRTC** and Firestore signaling, enabling remote diagnosis for patients in remote areas.
+* **Collaborative Resource Hub**: A verified directory connecting citizens with Doctors, NGOs, and emergency services.
+* **Community Reporting**: Citizens can report health hazards (e.g., waste, stagnant water) or illness outbreaks, which are instantly visible to authorities.
+* **Admin Command Center**: A comprehensive dashboard for authorities to track campaigns, manage referrals, view analytics (via **Recharts**), and verify providers.
+* **Role-Based Access Control**: Tailored interfaces and permissions for four distinct user types: **Citizens, Providers (Doctors), NGOs, and Admins**.
 
 ---
 
@@ -50,15 +50,14 @@
 * **Routing**: React Router DOM
 * **Forms**: React Hook Form + Yup Validation
 
-### Backend & Services
+### Backend
 * **Database**: Firebase Firestore (NoSQL, Real-time updates)
 * **Authentication**: Firebase Auth
-* **Hosting**: Firebase Hosting
 
 ### Maps & Real-time
 * **Mapping Engine**: [Leaflet](https://leafletjs.com/) & React-Leaflet
 * **Heatmaps**: React-Leaflet-Heatmap-Layer
-* **Video Communication**: Native WebRTC with Firestore Signaling / PeerJS
+* **Video Communication**: Native WebRTC with Firestore Signaling
 
 ---
 
@@ -74,7 +73,7 @@ Follow these steps to set up the project locally on your machine.
 
 1.  **Clone the repository**
     ```bash
-    git clone [https://github.com/Divyansh2905/HealthHub.git](https://github.com/Divyansh2905/HealthHub.git)
+    git clone https://github.com/Divyansh2905/HealthHub.git
     cd HealthHub
     ```
 
