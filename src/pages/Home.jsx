@@ -89,10 +89,10 @@ export default function Home() {
                     <div className="bg-blue-100 p-3 rounded-full text-blue-600">
                       <FaUserMd className="text-xl" />
                     </div>
-                    <h3 className="font-bold text-xl text-gray-800">The Provider</h3>
+                    <h3 className="font-bold text-xl text-gray-800">The Provider or NGO</h3>
                   </div>
                   <p className="text-gray-600 leading-relaxed">
-                    Log into a second window as a Provider. Watch real-time notifications appear from citizens, accept reports, and initiate WebRTC calls.
+                    Log into a second window as a Provider/NGO. Watch real-time notifications appear from citizens, accept reports, and initiate WebRTC calls.
                   </p>
                 </div>
 
