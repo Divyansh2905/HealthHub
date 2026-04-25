@@ -3,7 +3,7 @@ import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom"; // Import useLocation
 
 // Corrected import paths based on provided source code structure
-import Home from "./pages/home"; // Adjusted path to 'home' (lowercase)
+import Home from "./pages/Home";
 import Login from "./pages/Auth/Login";
 import Signup from "./pages/Auth/Signup";
 import EditProfile from "./pages/Profile/EditProfile";
