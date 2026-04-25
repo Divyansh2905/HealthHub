@@ -1,15 +1,12 @@
 // src/pages/home.jsx
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { FaCalendarAlt, FaHeartbeat } from "react-icons/fa";
+import { FaCalendarAlt, FaHeartbeat, FaUserAlt, FaUserMd, FaUserShield, FaInfoCircle } from "react-icons/fa";
 import { MdReport, MdHealthAndSafety } from "react-icons/md";
-import telemedicineImg from "./telemedicine.webp"; // Assumes telemedicine.webp is in src/pages/
-import { useAuth } from "../hooks/useAuth"; // Assumes useAuth.js is in src/hooks/
+import telemedicineImg from "./telemedicine.webp"; 
+import { useAuth } from "../hooks/useAuth"; 
 
-
-// Data for services - directly integrated
 const services = [
-  // This path is correct for creating a new report
   { id: 1, icon: <MdReport />, title: "Report Health Issue", path: "/report/new" },
   { id: 2, icon: <FaCalendarAlt />, title: "Upcoming Events", path: "/events" },
   { id: 3, icon: <FaHeartbeat />, title: "Health Support", path: "/support" },
@@ -18,40 +15,28 @@ const services = [
 
 export default function Home() {
   const navigate = useNavigate();
-  // Get user and loading state from the authentication hook
   const { user, loading: authLoading } = useAuth(); 
 
-  // Function to handle service card clicks with an authentication check
   const handleServiceClick = (servicePath) => {
-    // If authentication state is still being determined, do nothing
     if (authLoading) return;
 
-    // Special handling for the "Report Health Issue" service
     if (servicePath === "/report/new") {
       if (user) {
-        // Log the navigation path for debugging
-        console.log("Logged-in user: Navigating to", servicePath);
         navigate(servicePath);
       } else {
-        // Log the navigation path for debugging
-        console.log("Non-logged-in user: Navigating to /login");
         navigate("/login");
       }
     } else {
-      // For all other services, navigate directly as planned
-      console.log("Navigating to non-report path:", servicePath);
       navigate(servicePath);
     }
   };
 
   return (
     <div className="flex flex-col min-h-screen font-sans bg-gray-50">
-      {/* Main content area */}
       <div className="flex-grow">
+        
         {/* Hero Section */}
-        {/* Added mt-16 to create space from the header */}
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-b-3xl shadow-xl flex flex-col md:flex-row items-center justify-between p-6 md:p-12 pt-16 mx-auto w-full max-w-7xl">
-          {/* Text Section */}
           <div className="md:w-1/2 text-center md:text-left mb-8 md:mb-0">
             <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-4 drop-shadow-lg">
               Your Health, <br />
@@ -62,9 +47,7 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Image/Graphic Section - Replaced Map */}
           <div className="md:w-1/2 flex justify-center items-center p-4">
-            {/* Replace this placeholder with your actual health community graphic */}
             <img
               src={telemedicineImg}
               alt="Community Health Graphic"
@@ -73,33 +56,90 @@ export default function Home() {
           </div>
         </div>
 
+        {/* NEW: Interactive Demo Guide for Evaluators */}
+        <div className="container mx-auto px-4 mt-12 mb-4 max-w-6xl">
+          <div className="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden">
+            <div className="bg-blue-50 px-6 py-4 border-b border-blue-100 flex items-center gap-3">
+              <FaInfoCircle className="text-blue-600 text-2xl" />
+              <h2 className="text-xl md:text-2xl font-bold text-gray-800">How to Experience HealthHub</h2>
+            </div>
+            <div className="p-6 md:p-8">
+              <p className="text-gray-600 mb-8 text-lg">
+                This platform features <strong>Role-Based Access Control</strong>. To fully experience the real-time ecosystem, we recommend opening two browser windows (one in Incognito mode) to simulate interactions between different stakeholders.
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                {/* Role 1: Citizen */}
+                <div className="bg-gray-50 rounded-xl p-6 border border-gray-200 transition-all hover:shadow-md hover:border-purple-300">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="bg-purple-100 p-3 rounded-full text-purple-600">
+                      <FaUserAlt className="text-xl" />
+                    </div>
+                    <h3 className="font-bold text-xl text-gray-800">The Citizen</h3>
+                  </div>
+                  <p className="text-gray-600 leading-relaxed">
+                    Log in as a citizen to report local health hazards, view interactive heatmaps, and request telemedicine appointments.
+                  </p>
+                </div>
+
+                {/* Role 2: Healthcare Provider */}
+                <div className="bg-gray-50 rounded-xl p-6 border border-gray-200 transition-all hover:shadow-md hover:border-blue-300">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="bg-blue-100 p-3 rounded-full text-blue-600">
+                      <FaUserMd className="text-xl" />
+                    </div>
+                    <h3 className="font-bold text-xl text-gray-800">The Provider</h3>
+                  </div>
+                  <p className="text-gray-600 leading-relaxed">
+                    Log into a second window as a Provider. Watch real-time notifications appear from citizens, accept reports, and initiate WebRTC calls.
+                  </p>
+                </div>
+
+                {/* Role 3: Administrator */}
+                <div className="bg-gray-50 rounded-xl p-6 border border-gray-200 transition-all hover:shadow-md hover:border-red-300">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="bg-red-100 p-3 rounded-full text-red-500">
+                      <FaUserShield className="text-xl" />
+                    </div>
+                    <h3 className="font-bold text-xl text-gray-800">The Admin</h3>
+                  </div>
+                  <p className="text-gray-600 leading-relaxed">
+                    Admins have exclusive access to the global dashboard to monitor system-wide metrics, oversee platform security, and manage providers.
+                  </p>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Services Section */}
-        <div className="container mx-auto px-4 py-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-8">Our Services</h2>
+        <div className="container mx-auto px-4 py-12 max-w-7xl">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-10">Our Services</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {services.map((service) => (
               <div
                 key={service.id}
-                className="bg-white rounded-xl shadow-lg p-6 text-center transition-transform transform hover:scale-105 hover:shadow-xl cursor-pointer flex flex-col items-center justify-center space-y-3 border border-gray-100"
-                // Call the new handleServiceClick function on click
+                className="bg-white rounded-xl shadow-md hover:shadow-xl p-8 text-center transition-all duration-300 transform hover:-translate-y-2 cursor-pointer flex flex-col items-center justify-center space-y-4 border border-gray-100"
                 onClick={() => handleServiceClick(service.path)}
               >
                 <div className="text-5xl text-blue-600 mb-2">{service.icon}</div>
-                <p className="font-semibold text-lg text-gray-800">{service.title}</p>
+                <p className="font-semibold text-xl text-gray-800">{service.title}</p>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Footer (Optional) */}
-      <footer className="bg-gray-900 text-white py-6 text-center text-sm mt-12 shadow-inner">
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-8 text-center text-sm mt-auto shadow-inner">
         <div className="container mx-auto px-4">
-          <p>&copy; {new Date().getFullYear()} Health Hub. All rights reserved.</p>
-          <div className="flex justify-center space-x-4 mt-3">
-            <Link to="/privacy" className="text-gray-300 hover:text-blue-300 transition-colors duration-200">Privacy Policy</Link>
-            <span className="text-gray-500">|</span>
-            <Link to="/terms" className="text-gray-300 hover:text-blue-300 transition-colors duration-200">Terms of Service</Link>
+          <p className="text-gray-400 text-base">&copy; {new Date().getFullYear()} Health Hub. All rights reserved.</p>
+          <div className="flex justify-center space-x-6 mt-4">
+            <Link to="/privacy" className="text-gray-400 hover:text-white transition-colors duration-200">Privacy Policy</Link>
+            <span className="text-gray-600">|</span>
+            <Link to="/terms" className="text-gray-400 hover:text-white transition-colors duration-200">Terms of Service</Link>
           </div>
         </div>
       </footer>
