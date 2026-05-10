@@ -50,6 +50,10 @@ export default function Header() {
   const [manageOpen, setManageOpen] = useState(false);
   const manageDropdownRef = useRef(null);
 
+  const [language, setLanguage] = useState(
+    localStorage.getItem("language") || "en"
+  );
+
   useEffect(() => {
     function handleClickOutside(event) {
       if (
@@ -69,8 +73,53 @@ export default function Header() {
     };
   }, [manageOpen]);
 
+  useEffect(() => {
+    // Prevent multiple script injections
+    if (window.googleTranslateScriptLoaded) return;
+
+    window.googleTranslateScriptLoaded = true;
+
+    window.googleTranslateElementInit = () => {
+      if (!window.google?.translate) return;
+
+      new window.google.translate.TranslateElement(
+        {
+          pageLanguage: "en",
+          includedLanguages: "en,hi",
+          autoDisplay: false,
+        },
+        "google_translate_element"
+      );
+    };
+
+    const script = document.createElement("script");
+    script.src =
+      "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+    script.async = true;
+
+    document.body.appendChild(script);
+  }, []);
+
   const handleNavLinkClick = () => {
     setIsMobileMenuOpen(false);
+  };
+
+  const changeLanguage = (lang) => {
+    setLanguage(lang);
+
+    localStorage.setItem("language", lang);
+
+    setTimeout(() => {
+      const select = document.querySelector(".goog-te-combo");
+
+      if (!select) {
+        console.error("Google Translate dropdown not found");
+        return;
+      }
+
+      select.value = lang;
+      select.dispatchEvent(new Event("change"));
+    }, 100);
   };
 
   return (
@@ -80,9 +129,9 @@ export default function Header() {
         <div className="flex-shrink-0">
           <Link
             to="/"
-            className="flex items-center gap-2 text-2xl font-semibold text-blue-700 hover:text-blue-800 transition-colors duration-200"
+            className="flex items-center gap-2 text-2xl font-bold tracking-tight text-blue-700"
           >
-            <FaPlus className="text-blue-700 text-3xl" />
+            <FaPlus className="text-blue-600 text-2xl" />
             HealthHub
           </Link>
         </div>
@@ -128,27 +177,27 @@ export default function Header() {
 
           {/* Desktop navigation */}
           <nav className="hidden md:flex items-center gap-4 text-base">
-            <Link to="/" className="text-gray-700 hover:text-blue-600 hover:underline">
+            <Link to="/" className="text-gray-700 font-medium hover:text-blue-600 transition-colors duration-200">
               Home
             </Link>
             {user && (
-              <Link to="/reports" className="text-gray-700 hover:text-blue-600 hover:underline">
+              <Link to="/reports" className="text-gray-700 font-medium hover:text-blue-600 transition-colors duration-200">
                 Reports
               </Link>
             )}
-            <Link to="/map" className="text-gray-700 hover:text-blue-600 hover:underline">
+            <Link to="/map" className="text-gray-700 font-medium hover:text-blue-600 transition-colors duration-200">
               Map
             </Link>
-            <Link to="/providers" className="text-gray-700 hover:text-blue-600 hover:underline">
+            <Link to="/providers" className="text-gray-700 font-medium hover:text-blue-600 transition-colors duration-200">
               Providers
             </Link>
-            <Link to="/events" className="text-gray-700 hover:text-blue-600 hover:underline">
+            <Link to="/events" className="text-gray-700 font-medium hover:text-blue-600 transition-colors duration-200">
               Events
             </Link>
-            <Link to="/blogs" className="text-gray-700 hover:text-blue-600 hover:underline">
+            <Link to="/blogs" className="text-gray-700 font-medium hover:text-blue-600 transition-colors duration-200">
               Learn
             </Link>
-            <Link to="/support" className="text-gray-700 hover:text-blue-600 hover:underline">
+            <Link to="/support" className="text-gray-700 font-medium hover:text-blue-600 transition-colors duration-200">
               Support
             </Link>
 
@@ -170,7 +219,7 @@ export default function Header() {
               </>
             )}
 
-            {/* ✅ Google Translate Dropdown */}
+             {/* Google Translate Dropdown
                 <div
                   id="google_translate_element"
                   className="ml-4"
@@ -216,7 +265,49 @@ export default function Header() {
                       margin-right: 6px;
                     }
                   `}
-                </style>
+                </style> */}
+
+                {/* Language Switcher */}
+              {/* <div className="relative ml-2">
+                <div
+                  id="google_translate_element"
+                  className="translate-clean"
+                ></div>
+              </div> */}
+
+              {/* Hidden Google Translate Element */}
+              <div
+                id="google_translate_element"
+                style={{
+                  position: "absolute",
+                  left: "-9999px",
+                  top: "-9999px",
+                }}
+              ></div>
+
+              <div className="notranslate flex items-center bg-gray-100 rounded-full p-1">
+                <button
+                  onClick={() => changeLanguage("en")}
+                  className={`px-3 py-1.5 rounded-full text-sm font-semibold transition-all duration-200 ${
+                    language === "en"
+                      ? "bg-white shadow-sm text-blue-600"
+                      : "text-gray-600 hover:text-blue-600"
+                  }`}
+                >
+                  EN
+                </button>
+
+                <button
+                  onClick={() => changeLanguage("hi")}
+                  className={`px-3 py-1.5 rounded-full text-sm font-semibold transition-all duration-200 ${
+                    language === "hi"
+                      ? "bg-white shadow-sm text-blue-600"
+                      : "text-gray-600 hover:text-blue-600"
+                  }`}
+                >
+                  हिं
+                </button>
+              </div>
 
             {/* Logged-in */}
             {user && (
@@ -406,6 +497,40 @@ export default function Header() {
         isOpen={isAlertOpen}
         onClose={closeAlert}
       />
+      
+        <style>
+          {`
+            .goog-te-banner-frame.skiptranslate {
+              display: none !important;
+            }
+
+            body {
+              top: 0px !important;
+            }
+
+            .goog-logo-link {
+              display: none !important;
+            }
+
+            .goog-te-gadget {
+              color: transparent !important;
+              font-size: 0 !important;
+            }
+
+            iframe.goog-te-banner-frame {
+              display: none !important;
+            }
+
+            .skiptranslate {
+              display: none !important;
+            }
+            
+            .notranslate {
+              translate: no;
+            }
+
+          `}
+        </style>
     </header>
   );
 }
