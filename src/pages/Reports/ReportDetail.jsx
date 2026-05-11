@@ -434,7 +434,7 @@ export default function ReportDetail() {
                 Assign to me
               </button>
             )}
-            {(profile?.role === "admin" || isAssignedProvider) && report.status !== "in_review" && report.status !== "resolved" && (
+            {(isAssignedProvider) && report.status !== "in_review" && report.status !== "resolved" && (
                 <button 
                   onClick={() => changeStatus("in_review")} 
                   className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 font-semibold hover:bg-gray-100 transition-colors duration-200 shadow-sm"

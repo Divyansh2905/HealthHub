@@ -310,7 +310,7 @@ export default function ListReports() {
           )}
 
           {/* Assigned-only toggle for provider/ngo (acts as 'accepted reports' toggle) */}
-          {(role === "provider" || role === "ngo") && (
+          {(role === "provider" || role === "ngo" || role === "admin") && (
             <button
               onClick={(e) => {
                 e.preventDefault();
@@ -400,7 +400,7 @@ export default function ListReports() {
                     <div className="text-sm text-gray-700 mt-1 line-clamp-2">{r.description}</div>
 
                     <div className="text-xs text-gray-500 mt-2 flex items-center gap-2">
-                      <div>{r.address || (r.location ? `${Number(r.location.lat).toFixed(4)}, ${Number(r.location.lng).toFixed(4)}` : "")}</div>
+                      <div>{r.address || (r.location ? `Lat: ${Number(r.location.lat).toFixed(4)}, Long: ${Number(r.location.lng).toFixed(4)}` : "")}</div>
                       <div>·</div>
                       <div>{r.createdAt?.toDate ? r.createdAt.toDate().toLocaleString() : ""}</div>
                     </div>
@@ -437,7 +437,7 @@ export default function ListReports() {
                         </button>
                       )}
 
-                      {(profile.role === "admin" || isWorker(profile.role)) && r.status !== "resolved" && r.status !== "in_review" && (
+                      {r.assignedTo === profile.uid && r.status !== "resolved" && r.status !== "in_review" && (
                         <button
                           onClick={(e) => { e.preventDefault(); e.stopPropagation(); updateReportStatus(r, "in_review"); }}
                           className="w-full px-3 py-1 border rounded text-sm hover:bg-gray-100 transition-colors duration-200"

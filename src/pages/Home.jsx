@@ -133,13 +133,15 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8 text-center text-sm mt-auto shadow-inner">
+      <footer className="bg-gray-900 text-white py-8 text-center text-sm shadow-inner mt-30">
         <div className="container mx-auto px-4">
-          <p className="text-gray-400 text-base">&copy; {new Date().getFullYear()} Health Hub. All rights reserved.</p>
+          <p className="text-gray-400 text-xl">Built with ❤️ for HackHeritage 3.0 at the Heritage Institute of Technology, Kolkata.</p>
           <div className="flex justify-center space-x-6 mt-4">
-            <Link to="/privacy" className="text-gray-400 hover:text-white transition-colors duration-200">Privacy Policy</Link>
+            <p className="text-gray-400 text-base">&copy; {new Date().getFullYear()} HealthHub. All rights reserved.</p>
             <span className="text-gray-600">|</span>
-            <Link to="/terms" className="text-gray-400 hover:text-white transition-colors duration-200">Terms of Service</Link>
+            <p className="text-gray-400 text-base hover:text-white transition-colors duration-200">Privacy Policy</p>
+            <span className="text-gray-600">|</span>
+            <p className="text-gray-400 text-base hover:text-white transition-colors duration-200">Terms of Service</p>
           </div>
         </div>
       </footer>
