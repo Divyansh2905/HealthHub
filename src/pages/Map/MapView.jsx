@@ -183,12 +183,14 @@ export default function MapView() {
               New Report
             </Link>
           )}
-          <Link
-            to="/reports"
-            className="px-3 py-2 border rounded hover:bg-gray-100 transition-colors duration-200"
-          >
-            Back to Reports
-          </Link>
+          {user && (
+            <Link
+              to="/reports"
+              className="px-3 py-2 border rounded hover:bg-gray-100 transition-colors duration-200"
+            >
+              Back to Reports
+            </Link>
+          )}
 
           {(role === "provider" || role === "ngo") && (
             <Link
