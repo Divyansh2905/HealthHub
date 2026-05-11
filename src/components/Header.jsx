@@ -54,24 +54,34 @@ export default function Header() {
     localStorage.getItem("language") || "en"
   );
 
+  const [profileOpen, setProfileOpen] = useState(false);
+  const profileDropdownRef = useRef(null);
+
   useEffect(() => {
     function handleClickOutside(event) {
+      // Manage dropdown
       if (
         manageDropdownRef.current &&
         !manageDropdownRef.current.contains(event.target)
       ) {
         setManageOpen(false);
       }
+
+      // Profile dropdown
+      if (
+        profileDropdownRef.current &&
+        !profileDropdownRef.current.contains(event.target)
+      ) {
+        setProfileOpen(false);
+      }
     }
-    if (manageOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [manageOpen]);
+  }, []);
 
   useEffect(() => {
     // Prevent multiple script injections
@@ -131,7 +141,11 @@ export default function Header() {
             to="/"
             className="flex items-center gap-2 text-2xl font-bold tracking-tight text-blue-700"
           >
-            <FaPlus className="text-blue-600 text-2xl" />
+            <img
+              src="/healthhub_icon.svg"
+              alt="HealthHub"
+              className="h-8 w-8"
+            />
             HealthHub
           </Link>
         </div>
@@ -218,62 +232,6 @@ export default function Header() {
                 </Link>
               </>
             )}
-
-             {/* Google Translate Dropdown
-                <div
-                  id="google_translate_element"
-                  className="ml-4"
-                  style={{
-                    border: "1px solid #ccc",
-                    borderRadius: "6px",
-                    overflow: "hidden",
-                    height: "32px",
-                    display: "flex",
-                    alignItems: "center",
-                    background: "white",
-                    boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-                    padding: "0 6px",
-                  }}
-                ></div>
-
-                <style>
-                  {`
-                    .goog-te-gadget {
-                      font-family: Arial, sans-serif !important;
-                      font-size: 14px !important;
-                      display: flex;
-                      align-items: center;
-                    }
-                    .goog-te-gadget .goog-te-combo {
-                      border: none !important;
-                      outline: none !important;
-                      font-size: 14px !important;
-                      padding: 4px 6px !important;
-                      border-radius: 6px !important;
-                      background: white !important;
-                      cursor: pointer !important;
-                    }
-                    .goog-te-gadget .goog-te-combo:hover {
-                      background: #f3f4f6 !important;
-                    }
-                    .goog-logo-link { display: none !important; }
-                    #google_translate_element::before {
-                      content: "EN / HI";
-                      font-size: 14px;
-                      font-weight: 600;
-                      color: #444;
-                      margin-right: 6px;
-                    }
-                  `}
-                </style> */}
-
-                {/* Language Switcher */}
-              {/* <div className="relative ml-2">
-                <div
-                  id="google_translate_element"
-                  className="translate-clean"
-                ></div>
-              </div> */}
 
               {/* Hidden Google Translate Element */}
               <div
@@ -375,28 +333,80 @@ export default function Header() {
 
                 <NotificationsBell />
 
-                <Link
-                  to="/profile/edit"
-                  className="px-3 py-1 border border-gray-300 rounded-md bg-white hover:bg-gray-50"
-                >
-                  Profile
-                </Link>
-
-                {profile?.role === "admin" && (
-                  <Link
-                    to="/admin"
-                    className="px-3 py-1 border border-purple-600 bg-purple-600 text-white rounded-md hover:bg-purple-700"
+                <div className="relative" ref={profileDropdownRef}>
+                  <button
+                    type="button"
+                    onClick={() => setProfileOpen((open) => !open)}
+                    className="flex items-center gap-2 px-3 py-1 border border-gray-300 rounded-full bg-white hover:bg-gray-50"
                   >
-                    Admin
-                  </Link>
-                )}
+                    <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold">
+                      {(profile?.displayName || user?.email || "U")
+                        .charAt(0)
+                        .toUpperCase()}
+                    </div>
 
-                <button
-                  onClick={handleLogout}
-                  className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700"
-                >
-                  Logout
-                </button>
+                    <svg
+                      className="w-4 h-4 text-gray-600"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </button>
+
+                  {profileOpen && (
+                    <div className="absolute right-0 mt-2 w-52 bg-white border border-gray-200 rounded-xl shadow-lg z-30 overflow-hidden">
+                      
+                      {/* User Info */}
+                      <div className="px-4 py-3 border-b border-gray-100">
+                        <div className="font-semibold text-sm text-gray-800">
+                          {profile?.displayName || user.displayName || user.email}
+                        </div>
+
+                        <div className="text-xs text-gray-500 mt-1">
+                          {(profile && profile.role) || "Citizen"}
+                        </div>
+                      </div>
+
+                      {/* Profile */}
+                      <Link
+                        to="/profile/edit"
+                        onClick={() => setProfileOpen(false)}
+                        className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50"
+                      >
+                        Profile
+                      </Link>
+
+                      {/* Admin */}
+                      {profile?.role === "admin" && (
+                        <Link
+                          to="/admin"
+                          onClick={() => setProfileOpen(false)}
+                          className="block px-4 py-3 text-sm text-purple-700 hover:bg-purple-50"
+                        >
+                          Admin Dashboard
+                        </Link>
+                      )}
+
+                      {/* Logout */}
+                      <button
+                        onClick={() => {
+                          setProfileOpen(false);
+                          handleLogout();
+                        }}
+                        className="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </nav>
@@ -527,6 +537,28 @@ export default function Header() {
             
             .notranslate {
               translate: no;
+            }
+
+            .goog-text-highlight {
+              background-color: transparent !important;
+              box-shadow: none !important;
+            }
+
+            font {
+              background-color: transparent !important;
+              box-shadow: none !important;
+            }
+
+            .goog-te-spinner-pos,
+            .goog-te-balloon-frame,
+            #goog-gt-tt,
+            .goog-tooltip,
+            .goog-tooltip:hover {
+              display: none !important;
+            }
+
+            .VIpgJd-ZVi9od-aZ2wEe-wOHMyf {
+              display: none !important;
             }
 
           `}

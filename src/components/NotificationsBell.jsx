@@ -66,7 +66,7 @@ export default function NotificationsBell() {
           <div className="max-h-64 overflow-auto">
             {notifications.length === 0 && <div className="p-3 text-sm text-gray-500">No notifications</div>}
             {notifications.map((n) => (
-              <div key={n.id} className={`p-3 border-t hover:bg-gray-50 cursor-pointer ${n.read ? "" : "bg-gray-50"}`} onClick={() => handleOpenItem(n)}>
+              <div key={n.id} className={`p-3 border-t hover:bg-gray-100 cursor-pointer transition-colors duration-300 ease-in-out ${n.read ? "" : "bg-blue-100"}`} onClick={() => handleOpenItem(n)}>
                 <div className="font-medium text-sm">{n.title}</div>
                 <div className="text-xs text-gray-600">{n.body}</div>
                 <div className="text-xs text-gray-400 mt-1">{n.createdAt?.toDate ? n.createdAt.toDate().toLocaleString() : ""}</div>
