@@ -203,9 +203,24 @@ const handleCreateReferral = async () => {
 
           <p className="mt-4 text-base text-gray-700 leading-relaxed">{provider.bio || "No detailed description provided by this organization yet."}</p>
 
+          {isMyProfile && (
+            <div className="mt-4">
+              <Link
+                to="/profile/edit"
+                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md font-semibold hover:bg-blue-700 transition-colors duration-200"
+              >
+                Edit Profile
+              </Link>
+            </div>
+          )}
+
           <div className="mt-5 space-y-2 text-gray-700">
-            <div><strong>Contact:</strong> {provider.phone || "N/A"}</div>
-            <div><strong>Address:</strong> {provider.address || "N/A"}</div>
+            {(isAdmin || isMyProfile) && (
+              <>
+                <div><strong>Contact:</strong> {provider.phone || "N/A"}</div>
+                <div><strong>Address:</strong> {provider.address || "N/A"}</div>
+              </>
+            )}
             {provider.website && (
               <div>
                 <strong>Website:</strong>{" "}

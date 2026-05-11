@@ -46,6 +46,9 @@ export default function Header() {
   const canManageConsultations =
     profile && (profile.role === "provider" || profile.role === "ngo");
 
+  const notCitizen = 
+    profile && (profile.role === "provider" || profile.role === "ngo" || profile.role === "admin");
+
   // Manage dropdown
   const [manageOpen, setManageOpen] = useState(false);
   const manageDropdownRef = useRef(null);
@@ -194,7 +197,7 @@ export default function Header() {
             <Link to="/" className="text-gray-700 font-medium hover:text-blue-600 transition-colors duration-200">
               Home
             </Link>
-            {user && (
+            {user && notCitizen && (
               <Link to="/reports" className="text-gray-700 font-medium hover:text-blue-600 transition-colors duration-200">
                 Reports
               </Link>
@@ -382,6 +385,17 @@ export default function Header() {
                       >
                         Profile
                       </Link>
+
+                      {/* My Reports (for Citizens only) */}
+                      {profile?.role === "citizen" && (
+                        <Link
+                          to="/reports"
+                          onClick={() => setProfileOpen(false)}
+                          className="block px-4 py-3 text-sm text-fuchsia-800 hover:bg-gray-50"
+                        >
+                          My Reports
+                        </Link>
+                      )}
 
                       {/* Admin */}
                       {profile?.role === "admin" && (

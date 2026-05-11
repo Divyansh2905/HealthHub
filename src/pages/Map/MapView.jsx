@@ -26,7 +26,7 @@ export default function MapView() {
   const [loadingReports, setLoadingReports] = useState(true);
 
   const [type, setType] = useState("all");
-  const [statusFilter, setStatusFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("unresolved");
   const [qText, setQText] = useState("");
   const [tagsFilter, setTagsFilter] = useState("");
   const [scope, setScope] = useState("auto");
@@ -116,7 +116,8 @@ export default function MapView() {
 
       if (showMineOnly && r.uid !== user?.uid) return false;
       if (type !== "all" && r.type !== type) return false;
-      if (statusFilter !== "all" && r.status !== statusFilter) return false;
+      if (statusFilter === "unresolved" && r.status === "resolved") return false;
+      if (statusFilter !== "all" && statusFilter !== "unresolved" && r.status !== statusFilter) return false;
 
       if (qText) {
         const hay = `${r.title || ""} ${r.description || ""}`.toLowerCase();
@@ -160,7 +161,7 @@ export default function MapView() {
 
   const clearFilters = () => {
     setType("all");
-    setStatusFilter("all");
+    setStatusFilter("unresolved");
     setQText("");
     setTagsFilter("");
   };
@@ -243,11 +244,11 @@ export default function MapView() {
             onChange={(e) => setType(e.target.value)}
             className="w-full border p-2 rounded"
           >
-            <option value="all">all</option>
-            <option value="illness">illness</option>
-            <option value="outbreak">outbreak</option>
-            <option value="mental">mental</option>
-            <option value="other">other</option>
+            <option value="all">All</option>
+            <option value="illness">Illness</option>
+            <option value="outbreak">Outbreak</option>
+            <option value="mental">Mental Health</option>
+            <option value="other">Other</option>
           </select>
         </div>
 
@@ -258,10 +259,11 @@ export default function MapView() {
             onChange={(e) => setStatusFilter(e.target.value)}
             className="w-full border p-2 rounded"
           >
-            <option value="all">all</option>
-            <option value="pending">pending</option>
-            <option value="in_review">in_review</option>
-            <option value="resolved">resolved</option>
+            <option value="unresolved">Unresolved</option>
+            <option value="pending">Pending</option>
+            <option value="in_review">In Review</option>
+            <option value="resolved">Resolved</option>
+            <option value="all">All</option>
           </select>
         </div>
 

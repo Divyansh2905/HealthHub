@@ -17,8 +17,8 @@ import { useToast } from "../../components/ToastProvider";
 import AlertDialog from "../../components/AlertDialog";
 import { useUsers } from "../../hooks/useUsers";
 
-const TYPES = ["all", "illness", "outbreak", "mental", "other"];
-const STATUSES = ["all", "pending", "in_review", "resolved"];
+const TYPES = ["All", "illness", "outbreak", "mental", "other"];
+const STATUSES = ["Unresolved", "All", "pending", "in_review", "resolved"];
 
 export default function ListReports() {
   const { user, profile } = useAuth(); // may be null if not logged in
@@ -28,9 +28,9 @@ export default function ListReports() {
 
   const [reports, setReports] = useState([]);
   const [loadingReports, setLoadingReports] = useState(true);
-  const [type, setType] = useState("all");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [scope, setScope] = useState(profile?.role === "citizen" ? "mine" : "auto");
+  const [type, setType] = useState("All");
+  const [statusFilter, setStatusFilter] = useState("Unresolved");
+  const [scope, setScope] = useState(profile?.role === "citizen" ? "Mine" : "Auto");
   const [qText, setQText] = useState("");
   const [tagsFilter, setTagsFilter] = useState(""); // tags input (comma-separated)
 
@@ -107,15 +107,15 @@ export default function ListReports() {
     if (role === "citizen") {
       setScope("mine");
     } else if (role === "provider" || role === "ngo") {
-      setScope("all");
+      setScope("All");
     } else if (role === "admin") {
-      setScope("all");
+      setScope("All");
     } else {
-      setScope("all"); // public
+      setScope("All"); // public
     }
     // reset assigned-only toggle when role changes
     setAssignedOnly(false);
-    setPrevScope("all");
+    setPrevScope("All");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [role]);
 
@@ -137,8 +137,9 @@ export default function ListReports() {
       }
 
       if (showMineOnly && r.uid !== user?.uid) return false;
-      if (type !== "all" && r.type !== type) return false;
-      if (statusFilter !== "all" && r.status !== statusFilter) return false;
+      if (type !== "All" && r.type !== type) return false;
+      if (statusFilter === "Unresolved" && r.status === "resolved") return false;
+      if (statusFilter !== "All" && statusFilter !== "Unresolved" && r.status !== statusFilter) return false;
 
       if (qText) {
         const hay = `${r.title || ""} ${r.description || ""} ${r.address || ""} ${(r.notes || []).map(n => n.text).join(" ")}`.toLowerCase();
@@ -275,21 +276,21 @@ export default function ListReports() {
   // scope options for select
   const scopeOptions = (() => {
     if (role === "citizen") {
-      return [{ key: "mine", label: "My reports" }, { key: "all", label: "All" }];
+      return [{ key: "mine", label: "My reports" }, { key: "All", label: "All" }];
     }
     if (role === "provider" || role === "ngo") {
-      return [{ key: "all", label: "All" }, { key: "mine", label: "My reports" }];
+      return [{ key: "All", label: "All" }, { key: "mine", label: "My reports" }];
     }
     if (role === "admin") {
-      return [{ key: "all", label: "All" }, { key: "mine", label: "My reports" }];
+      return [{ key: "All", label: "All" }, { key: "mine", label: "My reports" }];
     }
-    return [{ key: "all", label: "All" }, { key: "mine", label: "My reports" }];
+    return [{ key: "All", label: "All" }, { key: "mine", label: "My reports" }];
   })();
 
   return (
     <div className="max-w-6xl mx-auto space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">Reports</h2>
+        <h2 className="text-xl font-semibold">{role === "citizen" ? "Your Reports" : "Reports"}</h2>
 
         <div className="flex items-center gap-2">
           {/* New Report, Map */}
@@ -298,7 +299,7 @@ export default function ListReports() {
               New Report
             </Link>
           )}
-          <Link to="/map" className="px-3 py-2 border rounded hover:bg-gray-100 transition-colors duration-200">
+          <Link to="/map" className="px-3 py-2 bg-cyan-500 text-white border rounded hover:bg-cyan-600 transition-colors duration-200">
             Map
           </Link>
 
@@ -317,18 +318,18 @@ export default function ListReports() {
                 // toggle assignedOnly: when turning on, save current scope and force 'all'
                 if (!assignedOnly) {
                   setPrevScope(scope);
-                  setScope("all");
+                  setScope("All");
                   setAssignedOnly(true);
                 } else {
                   // turning off -> restore previous scope
                   setAssignedOnly(false);
-                  setScope(prevScope || "all");
+                  setScope(prevScope || "All");
                 }
               }}
               className={`px-3 py-2 rounded border ${assignedOnly ? "bg-green-600 text-white border-green-600 hover:bg-green-700" : "bg-red-500 text-white hover:bg-red-600"}`}
               title="Toggle to show only reports assigned to you (Accepted)"
             >
-              {assignedOnly ? "Assigned: ON" : "Assigned: OFF"}
+              {assignedOnly ? "Only Assigned: ON" : "Only Assigned: OFF"}
             </button>
           )}
         </div>
@@ -365,18 +366,14 @@ export default function ListReports() {
           />
         </div>
 
-        <div>
-          <label className="block text-xs text-gray-500 mb-1">Scope</label>
-          {!user || profile?.role === "citizen" ? (
-            <select value="all" disabled className="w-full border p-2 rounded bg-gray-100 text-gray-500 cursor-not-allowed">
-              <option value="all">Your Reports</option>
-            </select>
-          ) : (
+        {role !== "citizen" && (
+          <div>
+            <label className="block text-xs text-gray-500 mb-1">Scope</label>
             <select value={scope} onChange={(e)=>setScope(e.target.value)} className="w-full border p-2 rounded">
               {scopeOptions.map(o => <option key={o.key} value={o.key}>{o.label}</option>)}
             </select>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {/* (Deprecated quick-links area moved) - keep a small helper row for providers/NGOs to navigate to referrals or assigned if needed */}
