@@ -187,7 +187,7 @@ export default function MapView() {
           {user && (
             <Link
               to="/reports"
-              className="px-3 py-2 border rounded hover:bg-gray-100 transition-colors duration-200"
+              className="px-3 py-2  bg-cyan-500 text-white border rounded hover:bg-cyan-600 transition-colors duration-200"
             >
               Back to Reports
             </Link>

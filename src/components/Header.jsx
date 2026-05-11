@@ -275,7 +275,7 @@ export default function Header() {
               <div className="flex items-center gap-3">
                 <div className="text-slate-700 text-sm">
                   <div className="font-semibold">
-                    {profile?.displayName || user.displayName || user.email}
+                    {profile?.displayName || user.email}
                   </div>
                   <div className="text-xs text-gray-500">
                     {(profile && profile.role) || "Citizen"}
@@ -343,7 +343,7 @@ export default function Header() {
                     className="flex items-center gap-2 px-3 py-1 border border-gray-300 rounded-full bg-white hover:bg-gray-50"
                   >
                     <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold">
-                      {(profile?.displayName || user?.email || "U")
+                      {(profile?.displayName || user.email || "U")
                         .charAt(0)
                         .toUpperCase()}
                     </div>
@@ -369,7 +369,7 @@ export default function Header() {
                       {/* User Info */}
                       <div className="px-4 py-3 border-b border-gray-100">
                         <div className="font-semibold text-sm text-gray-800">
-                          {profile?.displayName || user.displayName || user.email}
+                          {profile?.displayName || user.email}
                         </div>
 
                         <div className="text-xs text-gray-500 mt-1">
@@ -450,7 +450,7 @@ export default function Header() {
               <div className="flex flex-col items-center gap-3 w-full">
                 <div className="text-base text-slate-700 mt-2 text-center">
                   <div className="font-semibold">
-                    {profile?.displayName || user.displayName || user.email}
+                    {profile?.displayName || user.email}
                   </div>
                   <div className="text-xs text-gray-500">
                     {(profile && profile.role) || "Citizen"}
