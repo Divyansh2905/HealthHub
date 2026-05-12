@@ -6,7 +6,7 @@ import "./index.css";
 import "leaflet/dist/leaflet.css"; // important for map styling
 import "./components/Map/leafletSetup";
 import { AuthProvider } from "./hooks/useAuth";
-import { UsersProvider } from "./hooks/useUsers"; // Ensure UsersProvider is imported
+import { UsersProvider } from "./hooks/useUsers";
 
 createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
@@ -21,7 +21,5 @@ createRoot(document.getElementById("root")).render(
   // </React.StrictMode>
 );
 
-// The problematic test connection check has been removed.
-// The app will now initialize without trying to access the "test" collection.
-console.log("✅ Firebase initialized");
+console.log("Firebase initialized");
 

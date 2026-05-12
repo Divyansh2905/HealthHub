@@ -26,9 +26,14 @@ export default function MyReferrals() {
   const [received, setReceived] = useState([]);
   const [sent, setSent] = useState([]);
   const [tab, setTab] = useState("received");
+  // Determine if the current user has a provider or NGO role
+  const isWorker = profile?.role === "provider" || profile?.role === "ngo";
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !isWorker) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
 
     const rQ = query(
@@ -214,6 +219,15 @@ export default function MyReferrals() {
       }
     }
   };
+
+  // Render message if user is not a worker (provider/NGO)
+  if (!isWorker) {
+      return (
+          <div className="min-h-[300px] flex items-center justify-center bg-white p-6 rounded-lg shadow-sm">
+              <p className="text-lg text-gray-700">Only health providers and NGOs can view this page.</p>
+          </div>
+      );
+  }
 
   const renderReferralRow = (r) => {
     const fromMe = r.fromUid === user.uid;

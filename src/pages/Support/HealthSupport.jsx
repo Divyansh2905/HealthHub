@@ -211,7 +211,9 @@ export default function HealthSupport() {
               <h3 className="font-semibold">{h.name}</h3>
               <p className="text-sm text-gray-600">{h.type}</p>
               <p className="text-sm mt-1">
-                <strong>Contact:</strong> <a href="tel:{h.number}">{h.number}</a>
+                <strong>Contact:</strong> <a href={`tel:${h.number}`} className="text-blue-500 hover:underline">
+                  {h.number}
+                </a>
               </p>
             </div>
           </div>
