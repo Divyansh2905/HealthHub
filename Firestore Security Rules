@@ -71,16 +71,6 @@ service cloud.firestore {
         isAdmin();
     }
 
-    // --- Camps Collection Rules ---
-    match /camps/{campId} {
-      allow read: if isAdmin();
-    }
-    
-    // --- Posts Collection Rules (Awareness Posts) ---
-    match /posts/{postId} {
-      allow read: if isAdmin();
-    }
-
 
     // --- Referrals Collection Rules ---
     match /referrals/{referralId} {
