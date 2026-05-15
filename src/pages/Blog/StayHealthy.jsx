@@ -23,6 +23,7 @@ export default function StayHealthy() {
   const [searchTerm, setSearchTerm] = useState("");
   const [expandedBlog, setExpandedBlog] = useState(null);
   const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // form states
   const [showForm, setShowForm] = useState(false);
@@ -36,9 +37,18 @@ export default function StayHealthy() {
 
   // 🔹 Real-time fetch from Firestore
   useEffect(() => {
-    const unsub = onSnapshot(collection(db, "blogs"), (snapshot) => {
-      setBlogs(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-    });
+    const unsub = onSnapshot(
+      collection(db, "blogs"),
+      (snapshot) => {
+        setBlogs(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        setLoading(false);
+      },
+      (err) => {
+        console.error("StayHealthy: onSnapshot error", err);
+        addToast({ type: "error", title: "Load failed", message: err.message });
+        setLoading(false);
+      }
+    );
     return () => unsub();
   }, []);
 
@@ -124,7 +134,7 @@ export default function StayHealthy() {
   };
 
   return (
-    <div style={{ fontFamily: 'Arial, Helvetica, sans-serif', padding: '2rem 3rem', maxWidth: '1000px', margin: '0 auto', backgroundColor: '#fff' }}>
+    <div style={{ fontFamily: 'Arial, Helvetica, sans-serif', padding: '2rem 3rem', maxWidth: '1000px', margin: '0 auto' }}>
       <h1 style={{ fontSize: '2rem', fontWeight: 'bold', color: '#2d89ef', textAlign: 'center', marginBottom: '2rem' }}>
         Health Blogs & Resources
       </h1>
@@ -321,7 +331,18 @@ export default function StayHealthy() {
       />
 
       {/* Blog List */}
-      {filteredBlogs.length > 0 ? (
+      {loading ? (
+        <div style={{ minHeight: '20vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <svg style={{ height: 40, width: 40 }} viewBox="0 0 24 24" fill="none" stroke="#1F51FF" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" style={{ opacity: 0.25 }} />
+              <path d="M4 12a8 8 0 018-8" strokeLinecap="round" style={{ transformOrigin: 'center', animation: 'spin 1s linear infinite' }} />
+            </svg>
+            <p style={{ marginTop: 12, color: '#555' }}>Loading blogs…</p>
+            <style>{"@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }"}</style>
+          </div>
+        </div>
+      ) : filteredBlogs.length > 0 ? (
         filteredBlogs.map((blog, index) => (
           <div key={blog.id} style={{
             padding: '1.5rem',

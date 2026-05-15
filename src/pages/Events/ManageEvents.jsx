@@ -21,6 +21,7 @@ export default function ManageEvents() {
   const { addToast } = useToast();
 
   const [events, setEvents] = useState([]);
+  const [loadingEvents, setLoadingEvents] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -60,13 +61,16 @@ export default function ManageEvents() {
               return now < eventEnd; // only future/ongoing events
             });
           setEvents(liveEvents);
+          setLoadingEvents(false);
         } catch (err) {
           console.error("ManageEvents: snapshot parse error", err);
+          setLoadingEvents(false);
         }
       },
       (err) => {
         console.error("ManageEvents: onSnapshot error", err);
         addToast({ type: "error", title: "Events load failed", message: err.message });
+        setLoadingEvents(false);
       }
     );
     return () => unsub();
@@ -319,7 +323,18 @@ export default function ManageEvents() {
       )}
 
       {/* Event Cards */}
-      {visibleEvents.length > 0 ? visibleEvents.map((event, index) => (
+      {loadingEvents ? (
+        <div style={{ minHeight: '20vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <svg style={{ height: 40, width: 40}} viewBox="0 0 24 24" fill="none" stroke="#1F51FF" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" style={{ opacity: 0.25 }} />
+              <path d="M4 12a8 8 0 018-8" strokeLinecap="round" style={{ transformOrigin: 'center', animation: 'spin 1s linear infinite' }} />
+            </svg>
+            <p style={{ marginTop: 12, color: '#555' }}>Loading events…</p>
+            <style>{"@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }"}</style>
+          </div>
+        </div>
+      ) : visibleEvents.length > 0 ? visibleEvents.map((event, index) => (
         <div key={event.id} style={{ padding: '1rem', borderRadius: '12px', boxShadow: '0 6px 18px rgba(0,0,0,0.08)', borderLeft: '6px solid #2d89ef', marginBottom: '0.8rem', backgroundColor: '#fff' }}>
           <h2 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#2d89ef' }}>{event.title}</h2>
           <p style={{ fontSize: '0.95rem', color: '#555' }}>{(event.description || "").length > 100 ? (event.description || "").slice(0, 100) + "..." : event.description}</p>

@@ -109,10 +109,10 @@ export default function HealthSupport() {
 
   return (
     // Changed pt-20 to pt-28 to provide even more space for the sticky header
-    <div className="max-w-6xl mx-auto px-4 pt-28 pb-8">
+    <div className="max-w-6xl mx-auto px-4 pt-10">
       {/* Header */}
-      <header className="mb-6">
-        <h1 className="text-3xl font-bold text-slate-800">
+      <header className="mb-10" align="center">
+        <h1 className="text-3xl font-bold text-blue-500">
           Health Support & Helplines
         </h1>
         <p className="text-gray-600 mt-1">
