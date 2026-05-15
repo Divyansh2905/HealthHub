@@ -394,7 +394,7 @@ export default function ReportDetail() {
                               {c.proposedTimes.map((t, i) => <div key={i}>{new Date(t).toLocaleString()}</div>)}
                             </div>
                           )}
-                          {c.scheduledAt && <div className="mt-1 text-xs">Scheduled: {new Date(c.scheduledAt).toLocaleString()}</div>}
+                          {c.scheduledAt && <div className="mt-1 text-xs">Scheduled: {c.scheduledAt.toDate().toLocaleString()}</div>}
                           {c.lastRejectionNote && <div className="mt-1 text-xs text-amber-700">Patient note: {c.lastRejectionNote}</div>}
                           
                           {/* Display Provider's Notes and Prescription if session ended or completed */}

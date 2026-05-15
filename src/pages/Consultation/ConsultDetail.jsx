@@ -344,7 +344,7 @@ export default function ConsultDetail() {
 
   // ADMIN — mark completed (only after a session ended) (from Version 2, integrated with AlertDialog from Version 1)
   const handleAdminComplete = async () => {
-    if (!user || !isAdmin) return;
+    if (!user) return;
     if (consult.sessionStatus !== "ended") {
       addToast({ type: "error", title: "Not allowed", message: "A session must be ended before completion." });
       return;
@@ -406,8 +406,8 @@ export default function ConsultDetail() {
   // Adjusted showStart logic to use sessionStatus for finer control (from Version 2)
   const showStart = isProviderOfThis && consult.status === "confirmed" && hasSchedule && !isCancelled && !isCompleted && consult.sessionStatus !== "live" && consult.sessionStatus !== "ended";
   const showEnd = isProviderOfThis && consult.sessionStatus === "live"; // From Version 2
-  // Admin complete logic (from Version 2, updated with isCompleted check)
-  const showAdminComplete = isAdmin && consult.sessionStatus === "ended" && consult.status !== "completed"; 
+  // Completion logic for the assigned provider or admin once the session has ended
+  const showAdminComplete = (isAdmin || isProviderOfThis) && consult.sessionStatus === "ended" && consult.status !== "completed";
 
   return (
     <div className="max-w-3xl mx-auto p-4 bg-white rounded shadow-sm space-y-4">

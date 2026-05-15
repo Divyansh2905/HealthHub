@@ -69,7 +69,7 @@ export default function ResourceHub() {
         <input value={q} onChange={(e)=>setQ(e.target.value)} placeholder="Search name, org or service" className="md:col-span-2 border p-2 rounded" />
         <div>
           <label className="block text-xs text-gray-500 mb-1">Role</label>
-          <select value={roleFilter} onChange={(e)=>setRoleFilter(e.target.value)} className="w-full border p-2 rounded">
+          <select value={roleFilter} onChange={(e)=>setRoleFilter(e.target.value)} className="w-full border p-2 rounded h-12">
             {/* ENSURE 'All' OPTION IS PRESENT AND CORRESPONDS TO THE STATE */}
             <option value="all">All</option>
             <option value="provider">Providers</option>
@@ -77,11 +77,11 @@ export default function ResourceHub() {
           </select>
         </div>
         <div>
-          <label className="block text-xs text-gray-500 mb-1">&nbsp;</label>
-          <div className="flex items-center gap-2">
-            <input id="verified" type="checkbox" checked={onlyVerified} onChange={(e)=>setOnlyVerified(e.target.checked)} />
-            <label htmlFor="verified" className="text-sm">Only verified</label>
-          </div>
+          <label className="block text-xs text-gray-500 mb-1">Verified</label>
+          <label htmlFor="verified" className="flex items-center justify-between gap-3 w-full border rounded p-3 cursor-pointer hover:bg-slate-50 transition-colors duration-150">
+            <span className="text-sm font-medium text-gray-700">Only verified</span>
+            <input id="verified" type="checkbox" checked={onlyVerified} onChange={(e)=>setOnlyVerified(e.target.checked)} className="h-5 w-5 text-blue-600 rounded" />
+          </label>
         </div>
       </div>
 
