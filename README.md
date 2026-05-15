@@ -10,6 +10,7 @@
 ![Firebase](https://img.shields.io/badge/firebase-ffca28?style=for-the-badge&logo=firebase&logoColor=black)
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![Leaflet](https://img.shields.io/badge/Leaflet-199900?style=for-the-badge&logo=Leaflet&logoColor=white)
+![WebRTC](https://img.shields.io/badge/WebRTC-880808?style=for-the-badge&logo=webrtc&logoColor=white)
 
 <br />
 
@@ -121,5 +122,6 @@ Built with ❤️ for **HackHeritage 3.0** at the Heritage Institute of Technolo
 ---
 
 <p align="center">
-  <i>This project was developed as a solution for Problem Statement HH308.</i>
+  <i>This project was developed as a solution for Problem Statement HH308 - <br>
+  "Collaborative Ecosystem for Inclusive Health and Well-Being".</i>
 </p>

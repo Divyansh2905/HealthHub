@@ -5,6 +5,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../../firebase/config";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "../../components/ToastProvider";
 
 /**
  * Role-specific fields:
@@ -18,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 export default function EditProfile(){
   const { user, profile, setProfile, loading } = useAuth();
   const navigate = useNavigate();
+  const { addToast } = useToast(); // Ensure addToast is available
 
   // show loading until auth state finished
   useEffect(() => {
@@ -101,6 +103,7 @@ export default function EditProfile(){
     await setDoc(userRef, payload, { merge: true });
     // Update local profile context so UI updates immediately
     setProfile({ ...(profile || {}), ...payload });
+    addToast({ type: "success", title: "Profile Updated", message: "Your profile has been updated successfully." });
     navigate("/");
   };
 
@@ -112,7 +115,7 @@ export default function EditProfile(){
         {/* Common fields */}
         <div>
           <label className="block text-sm">Display name</label>
-          <input {...register("displayName")} className="w-full border p-2 rounded" />
+          <input {...register("displayName")} className="w-full border p-2 rounded" required />
         </div>
 
         <div>

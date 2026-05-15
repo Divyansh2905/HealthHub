@@ -27,7 +27,7 @@ export default function CreateReport() {
   const navigate = useNavigate();
   const { addToast } = useToast();
 
-  const { register, handleSubmit, setError, formState: { errors, isSubmitting } } = useForm({
+  const { register, handleSubmit, setError, clearErrors, formState: { errors, isSubmitting } } = useForm({
     defaultValues: { type: "illness", title: "", description: "", tags: "", address: "", photoUrl: "" },
   });
 
@@ -44,6 +44,8 @@ export default function CreateReport() {
     setSelected(position);
     setSelectedAccuracy(null); // When manually selecting, accuracy is not applicable/unknown
     setSelectedSource("manual");
+    // Clear location error immediately when user selects a location
+    clearErrors("location");
   };
 
   // Initial location fetch when component mounts
@@ -164,16 +166,36 @@ export default function CreateReport() {
   if (!user) return <div className="p-6">Please log in to create a report.</div>;
 
   const onSubmit = async (data) => {
+    // Clear any previous errors before validation
+    clearErrors();
+    const errors = {};
+    let hasErrors = false;
+
     if (!selected) {
-      setError("location", { type: "manual", message: "Please pick a location on the map or use your location." });
-      // Added toast for location error for more prominent feedback
-      addToast({ type: "error", title: "Missing Location", message: "Please pick a location on the map or use your location." });
-      return;
+      errors.location = { type: "manual", message: "Please pick a location on the map or use your location." };
+      hasErrors = true;
     }
+
     if (data.photoUrl && !/^https?:\/\/\S+\.\S+/.test(data.photoUrl)) {
-      setError("photoUrl", { type: "manual", message: "Please enter a valid http(s) URL or leave blank." });
-      // Added toast for photoUrl error
-      addToast({ type: "error", title: "Invalid Photo URL", message: "Please enter a valid http(s) URL or leave blank." });
+      errors.photoUrl = { type: "manual", message: "Please enter a valid http(s) URL or leave blank." };
+      hasErrors = true;
+    }
+
+    // If there are any errors, set them all and show toast
+    if (hasErrors) {
+      if (errors.location) setError("location", errors.location);
+      if (errors.photoUrl) setError("photoUrl", errors.photoUrl);
+      
+      // Show comprehensive error toast
+      const errorList = [];
+      if (errors.location) errorList.push("Missing location");
+      if (errors.photoUrl) errorList.push("Invalid photo URL");
+      
+      addToast({ 
+        type: "error", 
+        title: "Validation Error", 
+        message: errorList.join("; ") + ". Please fix and try again." 
+      });
       return;
     }
 
@@ -293,7 +315,13 @@ export default function CreateReport() {
 
         <div>
           <label className="block text-sm mb-1">Photo URL (optional)</label>
-          <input {...register("photoUrl")} className="w-full border p-2 rounded" placeholder="https://example.com/image.jpg" />
+          <input 
+            {...register("photoUrl", {
+              onChange: () => clearErrors("photoUrl") // Clear error when user starts typing
+            })} 
+            className="w-full border p-2 rounded" 
+            placeholder="https://example.com/image.jpg" 
+          />
           {errors.photoUrl && <p className="text-red-600 text-sm mt-1">{errors.photoUrl.message}</p>}
         </div>
 
